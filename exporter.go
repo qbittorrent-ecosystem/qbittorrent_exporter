@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -17,6 +18,13 @@ var (
 	password = kingpin.Flag("password", "Password for qBittorrent.").Short('p').Required().String()
 )
 
+const html = `
+	<!DOCTYPE html>
+	<title>qBittorrent Exporter</title>
+	<h1>qBittorrent Exporter</h1>
+	<p><a href=/metrics>Metrics</a></p>
+`
+
 func main() {
 	kingpin.Parse()
 
@@ -26,6 +34,12 @@ func main() {
 	}
 
 	http.Handle("/metrics", promhttp.Handler())
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if _, err := fmt.Fprint(w, html); err != nil {
+			log.Warnf("Error while sending a response for the '/' path: %v", err)
+		}
+	})
+
 	collector := collector.NewQBittorrentCollector(c, "qbittorrent", make(map[string]string))
 	prometheus.MustRegister(collector)
 	log.Fatal(http.ListenAndServe(":9177", nil))
