@@ -6,4 +6,4 @@ To import the dashboard into your grafana, download the [dashboard.json](https:/
 
 ## Screenshot
 
-![](./screenshot.png)
+![Dashboard screenshot](./screenshot.png)
