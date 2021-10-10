@@ -51,13 +51,13 @@ func (c *QBittorrentClient) login() error {
 
 type Status struct {
 	Connection        string `json:"connection_status"`
-	DHTNodes          uint   `json:"dht_nodes"`
-	Downloaded        uint64 `json:"dl_info_data"`
-	DownloadSpeed     uint   `json:"dl_info_speed"`
-	DownloadRateLimit uint   `json:"dl_rate_limit"`
-	Uploaded          uint64 `json:"up_info_data"`
-	UploadSpeed       uint   `json:"up_info_speed"`
-	UploadRateLimit   uint   `json:"up_rate_limit"`
+	DHTNodes          int    `json:"dht_nodes"`
+	Downloaded        int    `json:"dl_info_data"`
+	DownloadSpeed     int    `json:"dl_info_speed"`
+	DownloadRateLimit int    `json:"dl_rate_limit"`
+	Uploaded          int    `json:"up_info_data"`
+	UploadSpeed       int    `json:"up_info_speed"`
+	UploadRateLimit   int    `json:"up_rate_limit"`
 }
 
 func (c *QBittorrentClient) GetStatus() (Status, error) {
@@ -114,48 +114,48 @@ func (c *QBittorrentClient) GetCategories() ([]string, error) {
 }
 
 type Torrent struct {
-	AddedOn                uint    `json:"added_on"`
-	AmountLeft             uint    `json:"amount_left"`
+	AddedOn                int     `json:"added_on"`
+	AmountLeft             int     `json:"amount_left"`
 	AutoTMM                bool    `json:"auto_tmm"`
 	Category               string  `json:"category"`
-	Completed              uint64  `json:"completed"`
-	CompletionOn           uint    `json:"completion_on"`
+	Completed              int     `json:"completed"`
+	CompletionOn           int     `json:"completion_on"`
 	DownloadLimit          int     `json:"dl_limit"`
-	DownloadSpeed          uint    `json:"dlspeed"`
-	Downloaded             uint64  `json:"downloaded"`
-	DownloadedSession      uint64  `json:"downloaded_session"`
-	ETA                    uint    `json:"eta"`
+	DownloadSpeed          int     `json:"dlspeed"`
+	Downloaded             int     `json:"downloaded"`
+	DownloadedSession      int     `json:"downloaded_session"`
+	ETA                    int     `json:"eta"`
 	FirstLastPiecePriority bool    `json:"f_l_piece_prio"`
 	ForceStart             bool    `json:"force_start"`
 	Hash                   string  `json:"hash"`
-	LastActivity           uint    `json:"last_activity"`
+	LastActivity           int     `json:"last_activity"`
 	MagnetURI              string  `json:"magnet_uri"`
 	MaxRatio               float64 `json:"max_ratio"`
 	MaxSeedingTime         int     `json:"max_seeding_time"`
 	Name                   string  `json:"name"`
-	NumComplete            uint    `json:"num_complete"`
-	NumIncomplete          uint    `json:"num_incomplete"`
-	NumLeechs              uint    `json:"num_leechs"`
-	NumSeeds               uint    `json:"num_seeds"`
-	Priority               uint    `json:"priority"`
-	Progress               uint    `json:"progress"`
+	NumComplete            int     `json:"num_complete"`
+	NumIncomplete          int     `json:"num_incomplete"`
+	NumLeechs              int     `json:"num_leechs"`
+	NumSeeds               int     `json:"num_seeds"`
+	Priority               int     `json:"priority"`
+	Progress               int     `json:"progress"`
 	Ratio                  float64 `json:"ratio"`
 	RatioLimit             int     `json:"ratio_limit"`
 	SavePath               string  `json:"save_path"`
 	SeedingTimeLimit       int     `json:"seeding_time_limit"`
-	SeenComplete           uint64  `json:"seen_complete"`
+	SeenComplete           int     `json:"seen_complete"`
 	SeqDownload            bool    `json:"seq_dl"`
-	Size                   uint64  `json:"size"`
+	Size                   int     `json:"size"`
 	State                  string  `json:"state"`
 	SuperSeeding           bool    `json:"super_seeding"`
 	Tags                   string  `json:"tags"`
-	TimeActive             uint    `json:"time_active"`
-	TotalSize              uint64  `json:"total_size"`
+	TimeActive             int     `json:"time_active"`
+	TotalSize              int     `json:"total_size"`
 	Tracker                string  `json:"tracker"`
 	UploadLimit            int     `json:"up_limit"`
-	Uploaded               uint64  `json:"uploaded"`
-	UploadedSession        uint64  `json:"uploaded_session"`
-	UploadSpeed            uint    `json:"upspeed"`
+	Uploaded               int     `json:"uploaded"`
+	UploadedSession        int     `json:"uploaded_session"`
+	UploadSpeed            int     `json:"upspeed"`
 }
 
 func (c *QBittorrentClient) GetTorrents() ([]Torrent, error) {
