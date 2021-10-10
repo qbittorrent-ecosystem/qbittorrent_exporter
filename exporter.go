@@ -3,20 +3,22 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 	"github.com/ultram4rine/qbittorrent_exporter/client"
 	"github.com/ultram4rine/qbittorrent_exporter/collector"
-	"gopkg.in/alecthomas/kingpin.v2"
 )
 
-var (
-	address  = kingpin.Flag("address", "Address of qBittorrent.").Short('a').Required().String()
-	username = kingpin.Flag("username", "Username for qBittorrent.").Short('u').Required().String()
-	password = kingpin.Flag("password", "Password for qBittorrent.").Short('p').Required().String()
-)
+func getEnv(key, defaultValue string) string {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		return defaultValue
+	}
+	return value
+}
 
 const html = `
 	<!DOCTYPE html>
@@ -26,9 +28,15 @@ const html = `
 `
 
 func main() {
-	kingpin.Parse()
+	var (
+		qbittorrentAddr = getEnv("QBITTORRENT_ADDR", "http://localhost:8080")
+		qBittorrentUser = getEnv("QBITTORRENT_USER", "")
+		qBittorrentPass = getEnv("QBITTORRENT_PASS", "")
+		exporterPort    = getEnv("EXPORTER_PORT", ":9177")
+		metricsPrefix   = getEnv("METRICS_PREFIX", "qbittorrent")
+	)
 
-	c, err := client.NewQBittorrentClient(*address, *username, *password)
+	c, err := client.NewQBittorrentClient(qbittorrentAddr, qBittorrentUser, qBittorrentPass)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,7 +48,7 @@ func main() {
 		}
 	})
 
-	collector := collector.NewQBittorrentCollector(c, "qbittorrent", make(map[string]string))
+	collector := collector.NewQBittorrentCollector(c, metricsPrefix, make(map[string]string))
 	prometheus.MustRegister(collector)
-	log.Fatal(http.ListenAndServe(":9177", nil))
+	log.Fatal(http.ListenAndServe(exporterPort, nil))
 }
